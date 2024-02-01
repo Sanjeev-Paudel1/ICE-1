@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package card;
 
 /**
@@ -15,10 +11,11 @@ package card;
  */
 public class Card {
 
-   private String suit; //clubs, spades, diamonds, hearts
-   private int value;//1-13
+    private String suit; //clubs, spades, diamonds, hearts
+    private int value; //1-13
 
-   public static final String [] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
+    public static final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
+
     /**
      * @return the suit
      */
@@ -46,7 +43,14 @@ public class Card {
     public void setValue(int value) {
         this.value = value;
     }
-   
-   
-    
+
+    /**
+     * Checks if this card matches another card.
+     *
+     * @param otherCard the other card to compare with
+     * @return true if the cards match, false otherwise
+     */
+    public boolean isMatch(Card otherCard) {
+        return this.value == otherCard.getValue() && this.suit.equals(otherCard.getSuit());
+    }
 }

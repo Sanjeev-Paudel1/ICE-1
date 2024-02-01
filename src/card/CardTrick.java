@@ -14,14 +14,32 @@ import java.util.Scanner;
 
 public class CardTrick {
 
-    public static void main(String[] args) {
-        Card[] magicHand = new Card[7];
+    private static final int MAGIC_HAND_SIZE = 7;
 
-        // Add one lucky card: hard code 9 of Diamonds
-        Card luckyCard = new Card();
-        luckyCard.setValue(9);
-        luckyCard.setSuit("Diamonds");
-        magicHand[0] = luckyCard; // Overwrite the first card with the lucky card
+    public static void main(String[] args) {
+        Card[] magicHand = initializeMagicHand();
+
+        // Display the magic hand
+        displayMagicHand(magicHand);
+
+        // Ask the user for Card value and suit
+        Card userCard = getUserCard();
+
+        // Search magicHand for a match
+        boolean foundMatch = searchForMatch(magicHand, userCard);
+
+        // Report the result
+        reportResult(foundMatch);
+    }
+
+    private static Card[] initializeMagicHand() {
+        Card[] magicHand = new Card[MAGIC_HAND_SIZE];
+
+        // Add one luck card: hard code 2 of clubs
+        Card luckCard = new Card();
+        luckCard.setValue(2);
+        luckCard.setSuit("Clubs");
+        magicHand[0] = luckCard; // Overwrite the first card with the luck card
 
         // Fill magicHand with random Card objects (excluding the first card)
         for (int i = 1; i < magicHand.length; i++) {
@@ -31,36 +49,46 @@ public class CardTrick {
             magicHand[i] = c;
         }
 
-        // Ask the user for Card value and suit
+        return magicHand;
+    }
+
+    private static void displayMagicHand(Card[] magicHand) {
+        System.out.println("Magic Hand:");
+        for (Card card : magicHand) {
+            System.out.println(card.getSuit() + " " + card.getValue());
+        }
+    }
+
+    private static Card getUserCard() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your card value (1-13): ");
+        System.out.println("\nEnter a card value (1-13): ");
         int userValue = scanner.nextInt();
-        System.out.println("Enter your card suit (Hearts, Diamonds, Spades, Clubs): ");
-        String userSuit = scanner.next();
+        System.out.println("Enter a suit (0-3 where 0-Hearts, 1-Diamonds, 2-Clubs, 3-Spades): ");
+        int userSuitIndex = scanner.nextInt();
 
         // Create the user's card
         Card userCard = new Card();
         userCard.setValue(userValue);
-        userCard.setSuit(userSuit);
+        userCard.setSuit(Card.SUITS[userSuitIndex]);
 
-        // Search magicHand for a match
-        boolean foundMatch = false;
+        return userCard;
+    }
+
+    private static boolean searchForMatch(Card[] magicHand, Card userCard) {
         for (Card card : magicHand) {
-            if (card.getValue() == userCard.getValue() && card.getSuit().equalsIgnoreCase(userCard.getSuit())) {
-                foundMatch = true;
-                break;
+            if (card.isMatch(userCard)) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // Report the result
+    private static void reportResult(boolean foundMatch) {
         if (foundMatch) {
             System.out.println("Congratulations! You found a match in the magic hand.");
         } else {
-            System.out.println("Sorry! No match found in the magic hand.");
+            System.out.println("Sorry, your card is not in the magic hand.");
         }
-
-        // Close the scanner
-        scanner.close();
     }
 
     // Helper method to generate a random card value (1-13)
@@ -75,3 +103,7 @@ public class CardTrick {
         return random.nextInt(4);
     }
 }
+
+
+
+
